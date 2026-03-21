@@ -116,9 +116,7 @@ export function PanelSidebar({ activePage, onNavigate }: Props) {
       >
         {/* Brand */}
         <div className="flex items-center gap-2.5 px-4 h-[52px] border-b border-sidebar-border shrink-0">
-          <div className="h-8 w-8 rounded-lg bg-primary/10 flex items-center justify-center shrink-0">
-            <Cloud className="h-4.5 w-4.5 text-primary" />
-          </div>
+          <img src={scLogo} alt="ShreeCloud" className="h-8 w-8 rounded-lg shrink-0" />
           {!isCollapsed && (
             <div className="min-w-0">
               <span className="font-semibold text-foreground text-[13px] leading-none block">ShreeCloud</span>
