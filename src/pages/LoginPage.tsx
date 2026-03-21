@@ -53,9 +53,7 @@ export default function LoginPage() {
         <div className="w-full max-w-sm animate-in fade-in slide-in-from-bottom-4 duration-500">
           {/* Logo */}
           <div className="flex items-center gap-2.5 mb-10">
-            <div className="h-9 w-9 rounded-xl bg-primary/15 flex items-center justify-center">
-              <Cloud className="h-5 w-5 text-primary" />
-            </div>
+            <img src={scLogo} alt="ShreeCloud" className="h-9 w-9 rounded-xl" />
             <span className="font-bold text-foreground text-lg">ShreeCloud</span>
           </div>
 
