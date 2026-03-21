@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import { Cloud, LogIn, Loader2, Mail, KeyRound, Eye, EyeOff } from "lucide-react";
+import { LogIn, Loader2, Mail, KeyRound, Eye, EyeOff } from "lucide-react";
+import scLogo from "@/assets/sc-logo.png";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
@@ -52,9 +53,7 @@ export default function LoginPage() {
         <div className="w-full max-w-sm animate-in fade-in slide-in-from-bottom-4 duration-500">
           {/* Logo */}
           <div className="flex items-center gap-2.5 mb-10">
-            <div className="h-9 w-9 rounded-xl bg-primary/15 flex items-center justify-center">
-              <Cloud className="h-5 w-5 text-primary" />
-            </div>
+            <img src={scLogo} alt="ShreeCloud" className="h-9 w-9 rounded-xl" />
             <span className="font-bold text-foreground text-lg">ShreeCloud</span>
           </div>
 
@@ -147,7 +146,7 @@ export default function LoginPage() {
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_80%_80%,hsl(var(--primary)/0.2),transparent_60%)]" />
         <div className="relative text-center px-12">
           <div className="h-20 w-20 rounded-2xl bg-primary/20 backdrop-blur-sm flex items-center justify-center mx-auto mb-8 border border-primary/20">
-            <Cloud className="h-10 w-10 text-primary-foreground" />
+            <img src={scLogo} alt="ShreeCloud" className="h-12 w-12 rounded-lg" />
           </div>
           <h2 className="text-3xl font-bold text-primary-foreground mb-3">ShreeCloud Panel</h2>
           <p className="text-primary-foreground/70 text-sm max-w-xs mx-auto leading-relaxed">
