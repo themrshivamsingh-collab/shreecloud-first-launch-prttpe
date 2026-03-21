@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { Cloud, Server, LogOut, Circle, Search, Loader2, AlertCircle } from "lucide-react";
+import { Cloud, Server, LogOut, Circle, Search, Loader2, AlertCircle, ServerOff } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -7,24 +7,38 @@ import { Input } from "@/components/ui/input";
 import { useAuth } from "@/contexts/AuthContext";
 import { useState, useEffect } from "react";
 import { listServers } from "@/lib/pterodactyl";
+import { MOCK_SERVERS } from "@/lib/mockData";
 
 export default function ServerListPage() {
   const navigate = useNavigate();
-  const { user, logout } = useAuth();
+  const { user, logout, isDemoMode } = useAuth();
   const [search, setSearch] = useState("");
   const [servers, setServers] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
+    if (isDemoMode) {
+      // Use mock data for Discord demo login
+      setTimeout(() => {
+        setServers(MOCK_SERVERS);
+        setLoading(false);
+      }, 800);
+      return;
+    }
+
     listServers()
       .then((data) => {
         setServers(data);
         setError(null);
       })
-      .catch((e) => setError(e.message))
+      .catch((e) => {
+        const msg = e.message || 'Error loading server data. Please refresh or try again.';
+        setError(msg);
+        console.error(`[${new Date().toLocaleTimeString()}] Error loading server data:`, msg);
+      })
       .finally(() => setLoading(false));
-  }, []);
+  }, [isDemoMode]);
 
   const filtered = servers.filter((s) =>
     s.name.toLowerCase().includes(search.toLowerCase())
@@ -38,8 +52,18 @@ export default function ServerListPage() {
   const getStatusInfo = (server: any) => {
     if (server.isSuspended) return { label: "Suspended", color: "destructive" };
     if (server.isInstalling) return { label: "Installing", color: "warning" };
-    // status is null when running normally
     return { label: server.status === null ? "Available" : server.status || "Unknown", color: server.status === null ? "success" : "muted" };
+  };
+
+  // Friendly error message mapping
+  const getErrorDisplay = (err: string) => {
+    if (err.includes('Unable to connect') || err.includes('fetch')) {
+      return { title: "Connection Error", message: "Unable to connect to server panel. Please try again later.", icon: "connection" };
+    }
+    if (err.includes('Access denied') || err.includes('permissions')) {
+      return { title: "Access Denied", message: "Access denied. Please check your account permissions.", icon: "access" };
+    }
+    return { title: "Error", message: err, icon: "generic" };
   };
 
   return (
@@ -51,6 +75,11 @@ export default function ServerListPage() {
               <Cloud className="h-5 w-5 text-primary" />
             </div>
             <span className="font-bold text-foreground text-sm sm:text-base">ShreeCloud Panel</span>
+            {isDemoMode && (
+              <Badge variant="outline" className="text-[10px] border-warning/30 text-warning bg-warning/10 ml-1">
+                Demo
+              </Badge>
+            )}
           </div>
           <div className="flex items-center gap-2 sm:gap-3">
             <span className="text-sm text-muted-foreground hidden sm:inline">{user?.username}</span>
@@ -87,13 +116,23 @@ export default function ServerListPage() {
         )}
 
         {error && (
-          <div className="flex items-center gap-3 p-4 rounded-xl bg-destructive/10 border border-destructive/20 text-destructive">
-            <AlertCircle className="h-5 w-5 shrink-0" />
-            <p className="text-sm">{error}</p>
+          <div className="flex flex-col items-center justify-center py-16 px-4">
+            <div className="h-16 w-16 rounded-2xl bg-destructive/10 flex items-center justify-center mb-4">
+              <AlertCircle className="h-8 w-8 text-destructive" />
+            </div>
+            <h3 className="text-lg font-semibold text-foreground mb-1">{getErrorDisplay(error).title}</h3>
+            <p className="text-sm text-muted-foreground text-center max-w-md">{getErrorDisplay(error).message}</p>
+            <Button
+              variant="outline"
+              className="mt-4"
+              onClick={() => { setError(null); setLoading(true); window.location.reload(); }}
+            >
+              Try Again
+            </Button>
           </div>
         )}
 
-        {!loading && !error && (
+        {!loading && !error && servers.length > 0 && (
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
             {filtered.map((server) => {
               const status = getStatusInfo(server);
@@ -140,8 +179,25 @@ export default function ServerListPage() {
           </div>
         )}
 
-        {!loading && !error && filtered.length === 0 && (
-          <p className="text-center text-muted-foreground py-12">No servers found.</p>
+        {/* Empty state — no servers */}
+        {!loading && !error && servers.length === 0 && (
+          <div className="flex flex-col items-center justify-center py-20 px-4">
+            <div className="h-20 w-20 rounded-2xl bg-muted/50 flex items-center justify-center mb-5 border border-border">
+              <ServerOff className="h-10 w-10 text-muted-foreground/50" />
+            </div>
+            <h3 className="text-lg font-semibold text-foreground mb-1">No Servers Found</h3>
+            <p className="text-sm text-muted-foreground text-center max-w-sm">
+              There are no servers associated with this account.
+            </p>
+          </div>
+        )}
+
+        {/* Search empty state */}
+        {!loading && !error && servers.length > 0 && filtered.length === 0 && (
+          <div className="flex flex-col items-center justify-center py-16 px-4">
+            <Search className="h-10 w-10 text-muted-foreground/30 mb-3" />
+            <p className="text-sm text-muted-foreground">No servers match "{search}"</p>
+          </div>
         )}
       </main>
     </div>

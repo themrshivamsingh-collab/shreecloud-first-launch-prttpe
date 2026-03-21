@@ -1,10 +1,23 @@
 import { useState, useRef, useEffect } from "react";
-import { Play, RotateCcw, Square, Cpu, HardDrive, Clock, Wifi, MemoryStick, CircleDot, Copy, Check, Loader2 } from "lucide-react";
+import { Play, RotateCcw, Square, Cpu, HardDrive, Clock, Wifi, MemoryStick, CircleDot, Loader2 } from "lucide-react";
 import { useTheme, THEME_NAMES } from "@/contexts/ThemeContext";
+import { useAuth } from "@/contexts/AuthContext";
 import { AreaChart, Area, XAxis, YAxis, ResponsiveContainer, Tooltip } from "recharts";
 import { useParams } from "react-router-dom";
 import { getServerResources, getServerDetails, sendCommand, sendPowerAction } from "@/lib/pterodactyl";
+import { MOCK_RESOURCES, MOCK_SERVER_DETAILS, MOCK_CONSOLE_LOGS } from "@/lib/mockData";
 import { useToast } from "@/hooks/use-toast";
+
+/* ── Log Entry Type ── */
+interface LogEntry {
+  timestamp: string;
+  level: "info" | "warn" | "error" | "command";
+  message: string;
+}
+
+function formatTimestamp() {
+  return new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+}
 
 /* ── Reusable Stat Card ── */
 function StatCard({ icon: Icon, label, value, color }: {
@@ -106,12 +119,24 @@ function formatUptime(ms: number) {
   return `${h}h ${m}m`;
 }
 
+function getLogColor(level: string) {
+  switch (level) {
+    case "error": return "text-destructive";
+    case "warn": return "text-warning";
+    case "command": return "text-primary";
+    default: return "text-foreground/60";
+  }
+}
+
 export function ConsolePage() {
   const { serverId } = useParams();
   const { toast } = useToast();
   const { setTheme } = useTheme();
+  const { isDemoMode } = useAuth();
 
-  const [logs, setLogs] = useState<string[]>(["[ShreeCloud] Connecting to server..."]);
+  const [logs, setLogs] = useState<LogEntry[]>([
+    { timestamp: formatTimestamp(), level: "info", message: "[ShreeCloud] Connecting to server..." }
+  ]);
   const [command, setCommand] = useState("");
   const [resources, setResources] = useState<any>(null);
   const [serverInfo, setServerInfo] = useState<any>(null);
@@ -121,18 +146,59 @@ export function ConsolePage() {
   const [loading, setLoading] = useState(true);
   const terminalRef = useRef<HTMLDivElement>(null);
 
+  const addLog = (level: LogEntry["level"], message: string) => {
+    setLogs((prev) => [...prev, { timestamp: formatTimestamp(), level, message }]);
+  };
+
+  // Load mock data for demo mode
   useEffect(() => {
-    if (!serverId) return;
-    getServerDetails(serverId).then(setServerInfo).catch(() => {});
-  }, [serverId]);
+    if (!isDemoMode) return;
+    
+    setServerInfo(MOCK_SERVER_DETAILS);
+    setResources(MOCK_RESOURCES);
+    
+    // Populate mock logs
+    setTimeout(() => {
+      const mockLogs: LogEntry[] = MOCK_CONSOLE_LOGS.map(l => ({
+        timestamp: l.time,
+        level: l.level as LogEntry["level"],
+        message: l.message,
+      }));
+      setLogs(prev => [...prev, ...mockLogs]);
+      setLoading(false);
+    }, 600);
+
+    // Simulate resource fluctuations
+    const interval = setInterval(() => {
+      const now = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+      const cpuVal = 25 + Math.random() * 30;
+      const memPct = 40 + Math.random() * 20;
+      const diskPct = 18 + Math.random() * 5;
+      setCpuHistory((prev) => [...prev.slice(-19), { time: now, value: cpuVal }]);
+      setRamHistory((prev) => [...prev.slice(-19), { time: now, value: memPct }]);
+      setDiskHistory((prev) => [...prev.slice(-19), { time: now, value: diskPct }]);
+    }, 3000);
+    return () => clearInterval(interval);
+  }, [isDemoMode]);
+
+  // Real data fetch
+  useEffect(() => {
+    if (isDemoMode || !serverId) return;
+    getServerDetails(serverId)
+      .then(setServerInfo)
+      .catch((e) => {
+        addLog("error", `Error loading server details: ${e.message}`);
+        console.error(`[${formatTimestamp()}] Error loading server data:`, e.message);
+      });
+  }, [serverId, isDemoMode]);
 
   const fetchResources = async () => {
-    if (!serverId) return;
+    if (isDemoMode || !serverId) return;
     try {
       const res = await getServerResources(serverId);
       setResources(res);
       const limits = serverInfo?.limits || {};
-      const now = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+      const now = formatTimestamp();
       const cpuVal = res.resources?.cpu_absolute ?? 0;
       const memPct = res.resources?.memory_bytes && limits.memory
         ? (res.resources.memory_bytes / (limits.memory * 1024 * 1024)) * 100 : 0;
@@ -144,59 +210,82 @@ export function ConsolePage() {
       setDiskHistory((prev) => [...prev.slice(-19), { time: now, value: diskPct }]);
 
       if (loading) {
-        setLogs((prev) => [...prev, `[ShreeCloud] Server status: ${res.current_state || 'unknown'}`]);
+        addLog("info", `Server status: ${res.current_state || 'unknown'}`);
         setLoading(false);
       }
     } catch (e: any) {
       if (loading) {
-        setLogs((prev) => [...prev, `[ShreeCloud] Error: ${e.message}`]);
+        addLog("error", e.message);
+        console.error(`[${formatTimestamp()}] Error loading server data:`, e.message);
         setLoading(false);
       }
     }
   };
 
   useEffect(() => {
+    if (isDemoMode) return;
     fetchResources();
     const interval = setInterval(fetchResources, 5000);
     return () => clearInterval(interval);
-  }, [serverId]);
+  }, [serverId, isDemoMode]);
 
   useEffect(() => {
     if (terminalRef.current) terminalRef.current.scrollTop = terminalRef.current.scrollHeight;
   }, [logs]);
 
   const handleCommand = async () => {
-    if (!command.trim() || !serverId) return;
+    if (!command.trim()) return;
+    
     const themeMatch = command.trim().match(/^theme\s+(\d)$/i);
     if (themeMatch) {
       const id = parseInt(themeMatch[1], 10);
       if (id >= 0 && id <= 7) {
         setTheme(id);
-        setLogs((prev) => [...prev, `> ${command}`, `[ShreeCloud] Theme changed to: ${THEME_NAMES[id]}`]);
+        addLog("command", `> ${command}`);
+        addLog("info", `Theme changed to: ${THEME_NAMES[id]}`);
       } else {
-        setLogs((prev) => [...prev, `> ${command}`, `[ShreeCloud] Invalid theme. Use "theme 0" to "theme 7".`]);
+        addLog("command", `> ${command}`);
+        addLog("error", `Invalid theme. Use "theme 0" to "theme 7".`);
       }
       setCommand("");
       return;
     }
-    setLogs((prev) => [...prev, `> ${command}`]);
+
+    addLog("command", `> ${command}`);
+
+    if (isDemoMode) {
+      // Simulate command responses in demo mode
+      setTimeout(() => {
+        addLog("info", `[Server] Command executed: ${command}`);
+      }, 300);
+      setCommand("");
+      return;
+    }
+
+    if (!serverId) return;
     try {
       await sendCommand(serverId, command);
-      setLogs((prev) => [...prev, `[ShreeCloud] Command sent.`]);
+      addLog("info", "Command sent.");
     } catch (e: any) {
-      setLogs((prev) => [...prev, `[ShreeCloud] Error: ${e.message}`]);
+      addLog("error", e.message);
     }
     setCommand("");
   };
 
   const handlePower = async (signal: 'start' | 'stop' | 'restart') => {
+    if (isDemoMode) {
+      toast({ title: `Power: ${signal}`, description: `Signal sent to server (demo).` });
+      addLog("info", `Power signal "${signal}" sent.`);
+      return;
+    }
     if (!serverId) return;
     try {
       await sendPowerAction(serverId, signal);
       toast({ title: `Power: ${signal}`, description: `Signal sent to server.` });
-      setLogs((prev) => [...prev, `[ShreeCloud] Power signal "${signal}" sent.`]);
+      addLog("info", `Power signal "${signal}" sent.`);
     } catch (e: any) {
       toast({ title: "Error", description: e.message, variant: "destructive" });
+      addLog("error", e.message);
     }
   };
 
@@ -223,13 +312,13 @@ export function ConsolePage() {
           </p>
         </div>
         <div className="flex gap-2">
-          <button onClick={() => handlePower('start')} className="btn-glow flex items-center gap-1.5 px-4 py-2 rounded-md bg-success hover:bg-success/90 text-success-foreground font-medium text-xs">
+          <button onClick={() => handlePower('start')} className="btn-glow flex items-center gap-1.5 px-4 py-2 rounded-md bg-success hover:bg-success/90 text-success-foreground font-medium text-xs active:scale-[0.96] transition-transform">
             <Play className="h-3.5 w-3.5" /> Start
           </button>
-          <button onClick={() => handlePower('restart')} className="btn-glow flex items-center gap-1.5 px-4 py-2 rounded-md bg-warning hover:bg-warning/90 text-warning-foreground font-medium text-xs">
+          <button onClick={() => handlePower('restart')} className="btn-glow flex items-center gap-1.5 px-4 py-2 rounded-md bg-warning hover:bg-warning/90 text-warning-foreground font-medium text-xs active:scale-[0.96] transition-transform">
             <RotateCcw className="h-3.5 w-3.5" /> Restart
           </button>
-          <button onClick={() => handlePower('stop')} className="btn-glow flex items-center gap-1.5 px-4 py-2 rounded-md bg-destructive hover:bg-destructive/90 text-destructive-foreground font-medium text-xs">
+          <button onClick={() => handlePower('stop')} className="btn-glow flex items-center gap-1.5 px-4 py-2 rounded-md bg-destructive hover:bg-destructive/90 text-destructive-foreground font-medium text-xs active:scale-[0.96] transition-transform">
             <Square className="h-3.5 w-3.5" /> Stop
           </button>
         </div>
@@ -255,9 +344,10 @@ export function ConsolePage() {
           <span className="ml-2 text-[11px] text-muted-foreground font-mono tracking-wider">server console</span>
         </div>
         <div ref={terminalRef} className="terminal-body terminal-scroll h-[280px] sm:h-[360px]">
-          {logs.map((line, i) => (
-            <div key={i} className={`py-0.5 ${line.startsWith(">") ? "text-primary" : "text-foreground/60"}`}>
-              {line}
+          {logs.map((entry, i) => (
+            <div key={i} className={`py-0.5 flex gap-2 ${getLogColor(entry.level)}`}>
+              <span className="text-muted-foreground/40 font-mono text-[11px] shrink-0 select-none">{entry.timestamp}</span>
+              <span className="break-all">{entry.message}</span>
             </div>
           ))}
         </div>
