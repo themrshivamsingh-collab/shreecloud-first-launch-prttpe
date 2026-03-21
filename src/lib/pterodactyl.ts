@@ -1,22 +1,49 @@
 import { supabase } from "@/integrations/supabase/client";
 
+// ── User-friendly error messages ─────────────────────────
+function friendlyError(error: any): string {
+  const msg = error?.message || error?.toString() || '';
+  
+  if (msg.includes('FetchError') || msg.includes('fetch') || msg.includes('network') || msg.includes('Failed to fetch')) {
+    return 'Unable to connect to server panel. Please try again later.';
+  }
+  if (msg.includes('401') || msg.includes('403') || msg.includes('Unauthorized') || msg.includes('Forbidden') || msg.includes('Access denied')) {
+    return 'Access denied. Please check your account permissions.';
+  }
+  if (msg.includes('not configured') || msg.includes('PTERODACTYL')) {
+    return 'Server panel is not configured. Please contact an administrator.';
+  }
+  if (msg.includes('ServerStateConflictException') || msg.includes('still installing')) {
+    return 'Server is still installing. Please wait for installation to complete.';
+  }
+  if (msg.includes('404') || msg.includes('Not Found')) {
+    return 'Server not found. It may have been removed or you lack access.';
+  }
+  if (msg.includes('429') || msg.includes('rate limit')) {
+    return 'Too many requests. Please wait a moment and try again.';
+  }
+  if (msg.includes('500') || msg.includes('Internal Server')) {
+    return 'The server panel encountered an internal error. Please try again later.';
+  }
+  return msg || 'An unexpected error occurred. Please try again.';
+}
+
 async function pteroFetch(endpoint: string, method = 'GET', body?: unknown) {
   const { data, error } = await supabase.functions.invoke('pterodactyl-proxy', {
     body: { endpoint, method, body },
   });
 
-  if (error) throw new Error(error.message || 'Proxy request failed');
+  if (error) throw new Error(friendlyError(error));
   
-  // Handle Pterodactyl API errors (e.g. 409 installing, 404, etc.)
   if (data?.errors && Array.isArray(data.errors)) {
     const first = data.errors[0];
     if (first?.code === 'ServerStateConflictException') {
       throw new Error('Server is still installing. Please wait for installation to complete.');
     }
-    throw new Error(first?.detail || first?.code || 'Pterodactyl API error');
+    throw new Error(friendlyError({ message: first?.detail || first?.code }));
   }
   
-  if (data?.error) throw new Error(data.error);
+  if (data?.error) throw new Error(friendlyError({ message: data.error }));
   return data;
 }
 

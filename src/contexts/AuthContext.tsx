@@ -4,11 +4,13 @@ type User = {
   id: string;
   email: string;
   username: string;
+  isDiscord?: boolean;
 };
 
 type AuthContextType = {
   user: User | null;
   isAuthenticated: boolean;
+  isDemoMode: boolean;
   login: (email: string, password: string) => Promise<void>;
   register: (username: string, email: string, password: string) => Promise<void>;
   loginWithDiscord: () => Promise<void>;
@@ -18,6 +20,7 @@ type AuthContextType = {
 const AuthContext = createContext<AuthContextType>({
   user: null,
   isAuthenticated: false,
+  isDemoMode: false,
   login: async () => {},
   register: async () => {},
   loginWithDiscord: async () => {},
@@ -30,8 +33,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     return saved ? JSON.parse(saved) : null;
   });
 
+  const isDemoMode = user?.isDiscord === true;
+
   const login = useCallback(async (email: string, _password: string) => {
-    // Mock login
     await new Promise((r) => setTimeout(r, 800));
     const u = { id: "1", email, username: email.split("@")[0] };
     setUser(u);
@@ -46,8 +50,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const loginWithDiscord = useCallback(async () => {
-    await new Promise((r) => setTimeout(r, 1000));
-    const u = { id: "2", email: "discord@user.com", username: "DiscordUser" };
+    // This is called after the modal confirms — just set user
+    await new Promise((r) => setTimeout(r, 600));
+    const u = { id: "discord-1", email: "player@discord.gg", username: "DiscordPlayer", isDiscord: true };
     setUser(u);
     localStorage.setItem("shreecloud-user", JSON.stringify(u));
   }, []);
@@ -58,7 +63,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, []);
 
   return (
-    <AuthContext.Provider value={{ user, isAuthenticated: !!user, login, register, loginWithDiscord, logout }}>
+    <AuthContext.Provider value={{ user, isAuthenticated: !!user, isDemoMode, login, register, loginWithDiscord, logout }}>
       {children}
     </AuthContext.Provider>
   );
