@@ -8,49 +8,47 @@ interface Props {
 
 export function PanelTopBar({ activePage, onMenuToggle }: Props) {
   return (
-    <header className="panel-topbar h-[52px] flex items-center justify-between px-4 sm:px-5 shrink-0 z-10">
+    <header className="panel-topbar h-[56px] flex items-center justify-between px-4 sm:px-5 shrink-0 z-10">
       {/* Left */}
       <div className="flex items-center gap-3 min-w-0">
         {onMenuToggle && (
           <button
             onClick={onMenuToggle}
-            className="flex items-center justify-center h-8 w-8 rounded-md text-muted-foreground hover:text-foreground hover:bg-accent transition-colors shrink-0"
+            className="flex items-center justify-center h-9 w-9 rounded-xl text-muted-foreground hover:text-foreground hover:bg-accent transition-all shrink-0"
             aria-label="Toggle menu"
           >
             <Menu className="h-5 w-5" />
           </button>
         )}
-        <h2 className="text-sm font-semibold text-foreground truncate">{activePage}</h2>
-        <div className="h-4 w-px bg-border hidden sm:block" />
+        <h2 className="text-sm font-bold text-foreground truncate">{activePage}</h2>
+        <div className="h-4 w-px bg-border/50 hidden sm:block" />
         <ThemeSwitcher />
       </div>
 
       {/* Right */}
       <div className="flex items-center gap-3 sm:gap-5 shrink-0">
         <div className="hidden lg:flex items-center gap-5 text-xs text-muted-foreground">
-          <div className="flex items-center gap-1.5">
-            <Cpu className="h-3.5 w-3.5" />
-            <span className="font-mono">24%</span>
-          </div>
-          <div className="flex items-center gap-1.5">
-            <MemoryStick className="h-3.5 w-3.5" />
-            <span className="font-mono">1.2 GB</span>
-          </div>
-          <div className="flex items-center gap-1.5">
-            <HardDrive className="h-3.5 w-3.5" />
-            <span className="font-mono">3.1 GB</span>
-          </div>
+          {[
+            { icon: Cpu, label: "24%" },
+            { icon: MemoryStick, label: "1.2 GB" },
+            { icon: HardDrive, label: "3.1 GB" },
+          ].map(({ icon: Icon, label }) => (
+            <div key={label} className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-secondary/40">
+              <Icon className="h-3.5 w-3.5" />
+              <span className="font-mono text-[11px]">{label}</span>
+            </div>
+          ))}
         </div>
 
-        <div className="h-4 w-px bg-border hidden lg:block" />
+        <div className="h-4 w-px bg-border/40 hidden lg:block" />
 
-        {/* Status indicator */}
-        <div className="flex items-center gap-1.5 text-xs">
+        {/* Status */}
+        <div className="flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-lg bg-success/10 border border-success/20">
           <span className="relative flex h-2 w-2">
             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-success opacity-75" />
             <span className="relative inline-flex rounded-full h-2 w-2 bg-success" />
           </span>
-          <span className="text-success font-medium">Online</span>
+          <span className="text-success font-semibold">Online</span>
         </div>
 
         <div className="hidden md:flex items-center gap-1.5 text-xs text-muted-foreground">

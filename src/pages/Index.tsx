@@ -15,6 +15,7 @@ import { StartupPage } from "@/components/pages/StartupPage";
 import { ServerPropertiesPage } from "@/components/pages/ServerPropertiesPage";
 import { WorldsPage } from "@/components/pages/WorldsPage";
 import { ActivityPage } from "@/components/pages/ActivityPage";
+import { SubusersPage } from "@/components/pages/SubusersPage";
 import { useIsMobile } from "@/hooks/use-mobile";
 
 const Index = () => {
@@ -43,24 +44,23 @@ const Index = () => {
     if (activePage === "Server Properties") return <ServerPropertiesPage />;
     if (activePage === "Worlds") return <WorldsPage />;
     if (activePage === "Activity") return <ActivityPage />;
+    if (activePage === "Subusers") return <SubusersPage />;
     return <PlaceholderPage title={activePage} />;
   };
 
   return (
     <div className="flex min-h-screen bg-background">
-      {/* Desktop sidebar */}
       {!isMobile && (
         <PanelSidebar activePage={activePage} onNavigate={handleNavigate} />
       )}
 
-      {/* Mobile drawer */}
       {isMobile && mobileMenuOpen && (
         <div className="fixed inset-0 z-50 flex">
           <div
             className="fixed inset-0 bg-background/80 backdrop-blur-sm"
             onClick={() => setMobileMenuOpen(false)}
           />
-          <div className="relative z-50 w-[240px] max-w-[80vw] animate-in slide-in-from-left duration-200">
+          <div className="relative z-50 w-[250px] max-w-[80vw] animate-in slide-in-from-left duration-200">
             <PanelSidebar activePage={activePage} onNavigate={handleNavigate} />
           </div>
         </div>
