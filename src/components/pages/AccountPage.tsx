@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Copy, Check, Link, Unlink, Save, KeyRound, Loader2 } from "lucide-react";
+import { Copy, Check, Loader2 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { getAccount } from "@/lib/pterodactyl";
 
@@ -22,11 +22,6 @@ export function AccountPage() {
     setTimeout(() => setCopiedField(null), 2000);
   };
 
-  const inputClass =
-    "w-full rounded-lg border border-border bg-background px-3.5 py-2.5 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring transition-all";
-  const labelClass = "block text-xs font-medium text-muted-foreground uppercase tracking-wider mb-1.5";
-  const cardClass = "bg-card border border-border rounded-xl p-5 space-y-4";
-
   if (loading) {
     return (
       <div className="flex items-center justify-center py-20">
@@ -35,38 +30,36 @@ export function AccountPage() {
     );
   }
 
+  const fields = [
+    { label: "Username", value: account?.username || "" },
+    { label: "Email", value: account?.email || "" },
+    { label: "First Name", value: account?.first_name || "" },
+    { label: "Last Name", value: account?.last_name || "" },
+    { label: "Language", value: account?.language || "" },
+  ];
+
   return (
     <div className="space-y-5 max-w-2xl">
       <div>
-        <h1 className="text-2xl font-bold text-foreground tracking-tight">Account</h1>
-        <p className="text-sm text-muted-foreground mt-1">Your panel account information</p>
+        <h1 className="text-xl font-bold text-foreground tracking-tight">Account</h1>
+        <p className="text-sm text-muted-foreground mt-0.5">Your panel account information</p>
       </div>
 
-      <div className={cardClass}>
+      <div className="panel-card p-5 space-y-5">
         <h2 className="text-base font-semibold text-foreground">Profile</h2>
         <div className="space-y-3">
-          <div>
-            <label className={labelClass}>Username</label>
-            <input value={account?.username || ""} readOnly className={`${inputClass} opacity-80 cursor-default`} />
-          </div>
-          <div>
-            <label className={labelClass}>Email</label>
-            <input value={account?.email || ""} readOnly className={`${inputClass} opacity-80 cursor-default`} />
-          </div>
-          <div>
-            <label className={labelClass}>First Name</label>
-            <input value={account?.first_name || ""} readOnly className={`${inputClass} opacity-80 cursor-default`} />
-          </div>
-          <div>
-            <label className={labelClass}>Last Name</label>
-            <input value={account?.last_name || ""} readOnly className={`${inputClass} opacity-80 cursor-default`} />
-          </div>
-          <div>
-            <label className={labelClass}>Language</label>
-            <input value={account?.language || ""} readOnly className={`${inputClass} opacity-80 cursor-default`} />
-          </div>
-          <div className="flex items-center gap-3">
-            <label className={labelClass}>Admin</label>
+          {fields.map((f) => (
+            <div key={f.label} className="space-y-1.5">
+              <label className="block text-xs font-medium text-muted-foreground uppercase tracking-wider">{f.label}</label>
+              <input
+                value={f.value}
+                readOnly
+                className="w-full rounded-xl border border-border bg-background px-4 py-2.5 text-sm text-foreground opacity-80 cursor-default focus:outline-none"
+              />
+            </div>
+          ))}
+          <div className="flex items-center gap-3 pt-2">
+            <label className="text-xs font-medium text-muted-foreground uppercase tracking-wider">Admin</label>
             <span className={`text-sm font-medium ${account?.admin ? "text-success" : "text-muted-foreground"}`}>
               {account?.admin ? "Yes" : "No"}
             </span>

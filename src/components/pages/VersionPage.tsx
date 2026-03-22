@@ -112,8 +112,8 @@ export function VersionPage() {
     <div className="space-y-6 max-w-5xl">
       {/* Header */}
       <div>
-        <h1 className="text-2xl font-bold text-foreground tracking-tight">Server Version</h1>
-        <p className="text-sm text-muted-foreground mt-1">Select your server software and version</p>
+        <h1 className="text-xl font-bold text-foreground tracking-tight">Server Version</h1>
+        <p className="text-sm text-muted-foreground mt-0.5">Select your server software and version</p>
       </div>
 
       {/* Egg Selection */}
@@ -130,10 +130,10 @@ export function VersionPage() {
                   setInstalledVersion(null);
                   setVersionSearch("");
                 }}
-                className={`relative flex flex-col items-center gap-2 p-5 rounded-xl border transition-all duration-200 hover:scale-[1.02] ${
+                className={`relative flex flex-col items-center gap-2 p-5 rounded-2xl border transition-all duration-250 hover:scale-[1.02] ${
                   active
                     ? "bg-primary/10 border-primary text-foreground ring-1 ring-primary/30 shadow-lg shadow-primary/5"
-                    : "bg-card border-border text-muted-foreground hover:border-primary/40 hover:text-foreground"
+                    : "panel-card text-muted-foreground hover:border-primary/40 hover:text-foreground"
                 }`}
               >
                 <egg.icon className={`h-8 w-8 ${active ? "text-primary" : egg.color}`} />
@@ -177,10 +177,10 @@ export function VersionPage() {
               return (
                 <div
                   key={v.version}
-                  className={`relative bg-card border rounded-xl p-4 flex flex-col gap-3 transition-all duration-200 ${
+                  className={`relative panel-card p-4 flex flex-col gap-3 transition-all duration-250 ${
                     isInstalled
                       ? "border-primary ring-1 ring-primary/30 shadow-lg shadow-primary/5"
-                      : "border-border hover:border-primary/40 hover:shadow-md"
+                      : "hover:border-primary/40 hover:shadow-md"
                   }`}
                 >
                   {/* Top row */}
@@ -202,10 +202,10 @@ export function VersionPage() {
                   {/* Install button */}
                   <button
                     onClick={() => setInstalledVersion(installId)}
-                    className={`flex items-center justify-center gap-1.5 w-full py-2 rounded-lg text-xs font-semibold transition-all duration-150 ${
+                    className={`flex items-center justify-center gap-1.5 w-full py-2.5 rounded-xl text-xs font-semibold transition-all duration-200 ${
                       isInstalled
                         ? "bg-primary/15 text-primary border border-primary/30 cursor-default"
-                        : "bg-primary text-primary-foreground hover:brightness-110 hover:scale-[1.02] active:scale-[0.98]"
+                        : "btn-gradient hover:scale-[1.02] active:scale-[0.98]"
                     }`}
                     disabled={isInstalled}
                   >

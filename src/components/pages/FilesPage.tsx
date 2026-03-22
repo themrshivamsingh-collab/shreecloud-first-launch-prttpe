@@ -138,21 +138,21 @@ export function FilesPage({ onOpenPluginsManager }: FilesPageProps) {
     <div className="space-y-4 max-w-6xl">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-foreground tracking-tight">Files</h1>
+          <h1 className="text-xl font-bold text-foreground tracking-tight">Files</h1>
           <p className="text-sm text-muted-foreground mt-1">Browse your server files</p>
         </div>
         <div className="flex items-center gap-2">
           {currentPath.includes("/plugins") && onOpenPluginsManager && (
             <button
               onClick={onOpenPluginsManager}
-              className="btn-glow flex items-center gap-2 px-4 py-2 rounded-xl bg-primary/15 text-primary font-medium text-sm border border-primary/20 hover:bg-primary/25 transition-all"
+              className="btn-gradient flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-semibold"
             >
               <Package className="h-4 w-4" /> Plugins Manager
             </button>
           )}
           <button
             onClick={() => fetchFiles(currentPath)}
-            className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-medium bg-card border border-border text-muted-foreground hover:text-foreground transition-colors"
+            className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-medium panel-card text-muted-foreground hover:text-foreground transition-all"
           >
             <RefreshCw className="h-3.5 w-3.5" /> Refresh
           </button>
@@ -178,7 +178,7 @@ export function FilesPage({ onOpenPluginsManager }: FilesPageProps) {
       {/* Search + Back */}
       <div className="flex items-center gap-3">
         {canGoBack && (
-          <button onClick={goBack} className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-medium bg-card border border-border text-muted-foreground hover:text-foreground transition-colors">
+          <button onClick={goBack} className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-medium panel-card text-muted-foreground hover:text-foreground transition-all">
             <ChevronLeft className="h-3.5 w-3.5" /> Back
           </button>
         )}
@@ -188,7 +188,7 @@ export function FilesPage({ onOpenPluginsManager }: FilesPageProps) {
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder="Search files..."
-            className="w-full rounded-lg border border-border bg-background pl-9 pr-3 py-2 text-xs text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-ring"
+            className="w-full rounded-xl border border-border bg-background pl-9 pr-3 py-2.5 text-xs text-foreground placeholder:text-muted-foreground/50 focus:outline-none focus:ring-2 focus:ring-ring transition-all"
           />
         </div>
       </div>
@@ -200,7 +200,7 @@ export function FilesPage({ onOpenPluginsManager }: FilesPageProps) {
           <span className="ml-2 text-sm text-muted-foreground">Loading files...</span>
         </div>
       ) : (
-        <div className="glass-card rounded-xl overflow-hidden">
+        <div className="panel-card overflow-hidden">
           <table className="w-full text-sm">
             <thead>
               <tr className="border-b border-border/50">

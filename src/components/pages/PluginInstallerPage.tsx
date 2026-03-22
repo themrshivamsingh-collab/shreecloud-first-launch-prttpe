@@ -196,8 +196,8 @@ export function PluginInstallerPage({ onManagePlugins }: PluginInstallerProps) {
     <div className="space-y-5 max-w-6xl">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-foreground tracking-tight">Plugin Installer</h1>
-          <p className="text-sm text-muted-foreground mt-1">Browse and install plugins from real sources</p>
+          <h1 className="text-xl font-bold text-foreground tracking-tight">Plugin Installer</h1>
+          <p className="text-sm text-muted-foreground mt-0.5">Browse and install plugins from real sources</p>
         </div>
         {onManagePlugins && (
           <button
@@ -211,14 +211,14 @@ export function PluginInstallerPage({ onManagePlugins }: PluginInstallerProps) {
       </div>
 
       {/* Filters */}
-      <div className="bg-card border border-border rounded-lg p-4 space-y-3">
+      <div className="panel-card p-4 space-y-3">
         <div className="relative">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
           <input
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder="Search plugins..."
-            className="w-full bg-background border border-border rounded-lg pl-9 pr-4 py-2.5 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-ring"
+            className="w-full panel-card pl-9 pr-4 py-2.5 text-sm text-foreground placeholder:text-muted-foreground/50 focus:outline-none focus:ring-2 focus:ring-ring"
           />
         </div>
 
@@ -281,7 +281,7 @@ export function PluginInstallerPage({ onManagePlugins }: PluginInstallerProps) {
               return (
                 <div
                   key={`${plugin.source}-${plugin.id}`}
-                  className="bg-card border border-border rounded-lg p-4 flex flex-col gap-3 hover:border-primary/40 transition-colors duration-150"
+                  className="panel-card p-4 flex flex-col gap-3 hover:border-primary/40 transition-all duration-200"
                 >
                   <div className="flex items-start gap-3">
                     {plugin.iconUrl && (
@@ -332,12 +332,12 @@ export function PluginInstallerPage({ onManagePlugins }: PluginInstallerProps) {
                     <button
                       onClick={() => !isInstalled && !isInstalling && handleInstall(plugin.id)}
                       disabled={isInstalled || isInstalling}
-                      className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium transition-all duration-150
+                      className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-medium transition-all duration-200
                         ${isInstalled
-                          ? "bg-green-500/15 text-green-500 cursor-default"
+                          ? "bg-success/15 text-success cursor-default"
                           : isInstalling
                             ? "bg-primary/15 text-primary cursor-wait"
-                            : "bg-primary text-primary-foreground hover:scale-[1.02]"
+                            : "btn-gradient hover:scale-[1.02]"
                         }
                       `}
                     >
@@ -360,7 +360,7 @@ export function PluginInstallerPage({ onManagePlugins }: PluginInstallerProps) {
             <button
               onClick={() => setPage((p) => Math.max(1, p - 1))}
               disabled={page <= 1}
-              className="flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium bg-card border border-border text-foreground hover:bg-accent disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+              className="flex items-center gap-1.5 px-4 py-2 rounded-xl text-sm font-medium panel-card text-foreground hover:bg-accent disabled:opacity-40 disabled:cursor-not-allowed transition-all"
             >
               <ChevronLeft className="h-4 w-4" />
               Previous
@@ -369,7 +369,7 @@ export function PluginInstallerPage({ onManagePlugins }: PluginInstallerProps) {
             <button
               onClick={() => setPage((p) => p + 1)}
               disabled={page >= totalPages}
-              className="flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium bg-card border border-border text-foreground hover:bg-accent disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+              className="flex items-center gap-1.5 px-4 py-2 rounded-xl text-sm font-medium panel-card text-foreground hover:bg-accent disabled:opacity-40 disabled:cursor-not-allowed transition-all"
             >
               Next
               <ChevronRight className="h-4 w-4" />

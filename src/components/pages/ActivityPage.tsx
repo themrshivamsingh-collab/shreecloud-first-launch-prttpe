@@ -115,8 +115,8 @@ export function ActivityPage() {
     <div className="space-y-5 max-w-6xl">
       {/* Header */}
       <div>
-        <h1 className="text-2xl font-bold text-foreground tracking-tight">Activity</h1>
-        <p className="text-sm text-muted-foreground mt-1">Track all server and user actions in real time</p>
+        <h1 className="text-xl font-bold text-foreground tracking-tight">Activity</h1>
+        <p className="text-sm text-muted-foreground mt-0.5">Track all server and user actions in real time</p>
       </div>
 
       {/* Filters */}
@@ -127,7 +127,7 @@ export function ActivityPage() {
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder="Search activity..."
-            className="w-full bg-card border border-border rounded-lg pl-10 pr-4 py-2.5 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary/50 transition-colors"
+            className="w-full panel-card pl-10 pr-4 py-2.5 text-sm text-foreground placeholder:text-muted-foreground/50 focus:outline-none focus:ring-2 focus:ring-ring transition-all"
           />
         </div>
         <div className="flex gap-2">
@@ -136,10 +136,10 @@ export function ActivityPage() {
               key={f.value}
               onClick={() => setCategoryFilter(f.value)}
               className={cn(
-                "px-3 py-2 rounded-lg text-sm font-medium border transition-colors",
+                "px-3 py-2 rounded-xl text-sm font-medium border transition-all",
                 categoryFilter === f.value
                   ? "bg-primary/10 border-primary/30 text-primary"
-                  : "bg-card border-border text-muted-foreground hover:text-foreground hover:border-primary/20"
+                  : "panel-card text-muted-foreground hover:text-foreground hover:border-primary/20"
               )}
             >
               {f.label}
@@ -156,7 +156,7 @@ export function ActivityPage() {
           { label: "Permissions", value: logs.filter((l) => l.category === "permission").length, color: "text-warning" },
           { label: "Failed", value: logs.filter((l) => l.status === "failed").length, color: "text-destructive" },
         ].map((s) => (
-          <div key={s.label} className="bg-card border border-border rounded-lg p-3.5">
+          <div key={s.label} className="panel-card p-3.5">
             <span className="text-xs text-muted-foreground uppercase tracking-wider">{s.label}</span>
             <p className={cn("text-xl font-bold mt-1", s.color)}>{s.value}</p>
           </div>
@@ -164,7 +164,7 @@ export function ActivityPage() {
       </div>
 
       {/* Table */}
-      <div className="bg-card border border-border rounded-lg overflow-hidden">
+      <div className="panel-card overflow-hidden">
         {/* Table header */}
         <div className="grid grid-cols-[1fr_1.5fr_1fr_0.7fr_1fr] gap-4 px-4 py-3 border-b border-border text-xs text-muted-foreground uppercase tracking-wider">
           <span>User</span>
@@ -231,7 +231,7 @@ export function ActivityPage() {
       {/* Detail panel */}
       {selectedLog && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-background/80 backdrop-blur-sm" onClick={() => setSelectedLog(null)}>
-          <div className="bg-card border border-border rounded-xl w-full max-w-lg mx-4 shadow-2xl" onClick={(e) => e.stopPropagation()}>
+          <div className="panel-card w-full max-w-lg mx-4 shadow-2xl" onClick={(e) => e.stopPropagation()}>
             <div className="flex items-center justify-between px-5 py-4 border-b border-border">
               <h2 className="text-lg font-semibold text-foreground">Activity Detail</h2>
               <button onClick={() => setSelectedLog(null)} className="text-muted-foreground hover:text-foreground transition-colors">

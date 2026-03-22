@@ -24,9 +24,11 @@ function StatCard({ icon: Icon, label, value, color }: {
   icon: React.ElementType; label: string; value: string; color: string;
 }) {
   return (
-    <div className="stat-card">
+    <div className="panel-card p-4">
       <div className="flex items-center gap-2 mb-1.5">
-        <Icon className={`h-3.5 w-3.5 ${color}`} />
+        <div className="h-7 w-7 rounded-lg bg-primary/8 flex items-center justify-center">
+          <Icon className={`h-3.5 w-3.5 ${color}`} />
+        </div>
         <span className="text-[10px] sm:text-[11px] text-muted-foreground uppercase tracking-wider font-medium">{label}</span>
       </div>
       <p className="text-xs sm:text-sm font-semibold text-foreground truncate">{value}</p>
@@ -45,7 +47,7 @@ function ResourceGraph({ title, data, color, gradientId, unit, icon: Icon, curre
   currentValue: string;
 }) {
   return (
-    <div className="arix-card p-4 sm:p-5">
+    <div className="panel-card p-4 sm:p-5">
       <div className="flex items-center justify-between mb-3">
         <div className="flex items-center gap-2.5">
           <div className="h-8 w-8 rounded-md bg-primary/8 flex items-center justify-center border border-border/50">
@@ -306,19 +308,19 @@ export function ConsolePage() {
       {/* Header + Power buttons */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
         <div>
-          <h1 className="text-lg sm:text-xl font-semibold text-foreground">Console</h1>
+          <h1 className="text-lg sm:text-xl font-bold text-foreground">Console</h1>
           <p className="text-xs text-muted-foreground mt-0.5">
             Server — <span className={stateColor}>{stateLabel}</span>
           </p>
         </div>
         <div className="flex gap-2">
-          <button onClick={() => handlePower('start')} className="btn-glow flex items-center gap-1.5 px-4 py-2 rounded-md bg-success hover:bg-success/90 text-success-foreground font-medium text-xs active:scale-[0.96] transition-transform">
+          <button onClick={() => handlePower('start')} className="btn-glow flex items-center gap-1.5 px-4 py-2.5 rounded-xl bg-success hover:bg-success/90 text-success-foreground font-semibold text-xs active:scale-[0.96] transition-transform">
             <Play className="h-3.5 w-3.5" /> Start
           </button>
-          <button onClick={() => handlePower('restart')} className="btn-glow flex items-center gap-1.5 px-4 py-2 rounded-md bg-warning hover:bg-warning/90 text-warning-foreground font-medium text-xs active:scale-[0.96] transition-transform">
+          <button onClick={() => handlePower('restart')} className="btn-glow flex items-center gap-1.5 px-4 py-2.5 rounded-xl bg-warning hover:bg-warning/90 text-warning-foreground font-semibold text-xs active:scale-[0.96] transition-transform">
             <RotateCcw className="h-3.5 w-3.5" /> Restart
           </button>
-          <button onClick={() => handlePower('stop')} className="btn-glow flex items-center gap-1.5 px-4 py-2 rounded-md bg-destructive hover:bg-destructive/90 text-destructive-foreground font-medium text-xs active:scale-[0.96] transition-transform">
+          <button onClick={() => handlePower('stop')} className="btn-glow flex items-center gap-1.5 px-4 py-2.5 rounded-xl bg-destructive hover:bg-destructive/90 text-destructive-foreground font-semibold text-xs active:scale-[0.96] transition-transform">
             <Square className="h-3.5 w-3.5" /> Stop
           </button>
         </div>
