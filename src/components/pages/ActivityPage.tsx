@@ -231,7 +231,7 @@ export function ActivityPage() {
       {/* Detail panel */}
       {selectedLog && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-background/80 backdrop-blur-sm" onClick={() => setSelectedLog(null)}>
-          <div className="bg-card border border-border rounded-xl w-full max-w-lg mx-4 shadow-2xl" onClick={(e) => e.stopPropagation()}>
+          <div className="panel-card w-full max-w-lg mx-4 shadow-2xl" onClick={(e) => e.stopPropagation()}>
             <div className="flex items-center justify-between px-5 py-4 border-b border-border">
               <h2 className="text-lg font-semibold text-foreground">Activity Detail</h2>
               <button onClick={() => setSelectedLog(null)} className="text-muted-foreground hover:text-foreground transition-colors">
