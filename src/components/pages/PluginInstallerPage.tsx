@@ -332,12 +332,12 @@ export function PluginInstallerPage({ onManagePlugins }: PluginInstallerProps) {
                     <button
                       onClick={() => !isInstalled && !isInstalling && handleInstall(plugin.id)}
                       disabled={isInstalled || isInstalling}
-                      className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium transition-all duration-150
+                      className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-medium transition-all duration-200
                         ${isInstalled
-                          ? "bg-green-500/15 text-green-500 cursor-default"
+                          ? "bg-success/15 text-success cursor-default"
                           : isInstalling
                             ? "bg-primary/15 text-primary cursor-wait"
-                            : "bg-primary text-primary-foreground hover:scale-[1.02]"
+                            : "btn-gradient hover:scale-[1.02]"
                         }
                       `}
                     >
