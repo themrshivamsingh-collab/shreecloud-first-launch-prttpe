@@ -177,10 +177,10 @@ export function VersionPage() {
               return (
                 <div
                   key={v.version}
-                  className={`relative bg-card border rounded-xl p-4 flex flex-col gap-3 transition-all duration-200 ${
+                  className={`relative panel-card p-4 flex flex-col gap-3 transition-all duration-250 ${
                     isInstalled
                       ? "border-primary ring-1 ring-primary/30 shadow-lg shadow-primary/5"
-                      : "border-border hover:border-primary/40 hover:shadow-md"
+                      : "hover:border-primary/40 hover:shadow-md"
                   }`}
                 >
                   {/* Top row */}
