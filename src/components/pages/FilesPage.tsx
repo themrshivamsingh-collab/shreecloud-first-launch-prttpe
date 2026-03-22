@@ -200,7 +200,7 @@ export function FilesPage({ onOpenPluginsManager }: FilesPageProps) {
           <span className="ml-2 text-sm text-muted-foreground">Loading files...</span>
         </div>
       ) : (
-        <div className="glass-card rounded-xl overflow-hidden">
+        <div className="panel-card overflow-hidden">
           <table className="w-full text-sm">
             <thead>
               <tr className="border-b border-border/50">
