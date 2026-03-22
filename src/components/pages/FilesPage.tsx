@@ -138,7 +138,7 @@ export function FilesPage({ onOpenPluginsManager }: FilesPageProps) {
     <div className="space-y-4 max-w-6xl">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-foreground tracking-tight">Files</h1>
+          <h1 className="text-xl font-bold text-foreground tracking-tight">Files</h1>
           <p className="text-sm text-muted-foreground mt-1">Browse your server files</p>
         </div>
         <div className="flex items-center gap-2">
