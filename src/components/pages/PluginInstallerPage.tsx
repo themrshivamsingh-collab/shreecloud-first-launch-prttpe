@@ -211,7 +211,7 @@ export function PluginInstallerPage({ onManagePlugins }: PluginInstallerProps) {
       </div>
 
       {/* Filters */}
-      <div className="bg-card border border-border rounded-lg p-4 space-y-3">
+      <div className="panel-card p-4 space-y-3">
         <div className="relative">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
           <input
