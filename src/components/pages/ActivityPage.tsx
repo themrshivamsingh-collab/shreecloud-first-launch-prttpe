@@ -136,10 +136,10 @@ export function ActivityPage() {
               key={f.value}
               onClick={() => setCategoryFilter(f.value)}
               className={cn(
-                "px-3 py-2 rounded-lg text-sm font-medium border transition-colors",
+                "px-3 py-2 rounded-xl text-sm font-medium border transition-all",
                 categoryFilter === f.value
                   ? "bg-primary/10 border-primary/30 text-primary"
-                  : "bg-card border-border text-muted-foreground hover:text-foreground hover:border-primary/20"
+                  : "panel-card text-muted-foreground hover:text-foreground hover:border-primary/20"
               )}
             >
               {f.label}
