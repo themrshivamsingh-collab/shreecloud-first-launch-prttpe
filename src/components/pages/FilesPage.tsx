@@ -178,7 +178,7 @@ export function FilesPage({ onOpenPluginsManager }: FilesPageProps) {
       {/* Search + Back */}
       <div className="flex items-center gap-3">
         {canGoBack && (
-          <button onClick={goBack} className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-medium bg-card border border-border text-muted-foreground hover:text-foreground transition-colors">
+          <button onClick={goBack} className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-medium panel-card text-muted-foreground hover:text-foreground transition-all">
             <ChevronLeft className="h-3.5 w-3.5" /> Back
           </button>
         )}
