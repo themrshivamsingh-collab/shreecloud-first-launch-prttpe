@@ -281,7 +281,7 @@ export function PluginInstallerPage({ onManagePlugins }: PluginInstallerProps) {
               return (
                 <div
                   key={`${plugin.source}-${plugin.id}`}
-                  className="bg-card border border-border rounded-lg p-4 flex flex-col gap-3 hover:border-primary/40 transition-colors duration-150"
+                  className="panel-card p-4 flex flex-col gap-3 hover:border-primary/40 transition-all duration-200"
                 >
                   <div className="flex items-start gap-3">
                     {plugin.iconUrl && (
