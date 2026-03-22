@@ -202,10 +202,10 @@ export function VersionPage() {
                   {/* Install button */}
                   <button
                     onClick={() => setInstalledVersion(installId)}
-                    className={`flex items-center justify-center gap-1.5 w-full py-2 rounded-lg text-xs font-semibold transition-all duration-150 ${
+                    className={`flex items-center justify-center gap-1.5 w-full py-2.5 rounded-xl text-xs font-semibold transition-all duration-200 ${
                       isInstalled
                         ? "bg-primary/15 text-primary border border-primary/30 cursor-default"
-                        : "bg-primary text-primary-foreground hover:brightness-110 hover:scale-[1.02] active:scale-[0.98]"
+                        : "btn-gradient hover:scale-[1.02] active:scale-[0.98]"
                     }`}
                     disabled={isInstalled}
                   >
