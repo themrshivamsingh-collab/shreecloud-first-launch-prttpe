@@ -164,7 +164,7 @@ export function ActivityPage() {
       </div>
 
       {/* Table */}
-      <div className="bg-card border border-border rounded-lg overflow-hidden">
+      <div className="panel-card overflow-hidden">
         {/* Table header */}
         <div className="grid grid-cols-[1fr_1.5fr_1fr_0.7fr_1fr] gap-4 px-4 py-3 border-b border-border text-xs text-muted-foreground uppercase tracking-wider">
           <span>User</span>
