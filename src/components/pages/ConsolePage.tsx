@@ -314,13 +314,13 @@ export function ConsolePage() {
           </p>
         </div>
         <div className="flex gap-2">
-          <button onClick={() => handlePower('start')} className="btn-glow flex items-center gap-1.5 px-4 py-2 rounded-md bg-success hover:bg-success/90 text-success-foreground font-medium text-xs active:scale-[0.96] transition-transform">
+          <button onClick={() => handlePower('start')} className="btn-glow flex items-center gap-1.5 px-4 py-2.5 rounded-xl bg-success hover:bg-success/90 text-success-foreground font-semibold text-xs active:scale-[0.96] transition-transform">
             <Play className="h-3.5 w-3.5" /> Start
           </button>
-          <button onClick={() => handlePower('restart')} className="btn-glow flex items-center gap-1.5 px-4 py-2 rounded-md bg-warning hover:bg-warning/90 text-warning-foreground font-medium text-xs active:scale-[0.96] transition-transform">
+          <button onClick={() => handlePower('restart')} className="btn-glow flex items-center gap-1.5 px-4 py-2.5 rounded-xl bg-warning hover:bg-warning/90 text-warning-foreground font-semibold text-xs active:scale-[0.96] transition-transform">
             <RotateCcw className="h-3.5 w-3.5" /> Restart
           </button>
-          <button onClick={() => handlePower('stop')} className="btn-glow flex items-center gap-1.5 px-4 py-2 rounded-md bg-destructive hover:bg-destructive/90 text-destructive-foreground font-medium text-xs active:scale-[0.96] transition-transform">
+          <button onClick={() => handlePower('stop')} className="btn-glow flex items-center gap-1.5 px-4 py-2.5 rounded-xl bg-destructive hover:bg-destructive/90 text-destructive-foreground font-semibold text-xs active:scale-[0.96] transition-transform">
             <Square className="h-3.5 w-3.5" /> Stop
           </button>
         </div>
