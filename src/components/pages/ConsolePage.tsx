@@ -47,7 +47,7 @@ function ResourceGraph({ title, data, color, gradientId, unit, icon: Icon, curre
   currentValue: string;
 }) {
   return (
-    <div className="arix-card p-4 sm:p-5">
+    <div className="panel-card p-4 sm:p-5">
       <div className="flex items-center justify-between mb-3">
         <div className="flex items-center gap-2.5">
           <div className="h-8 w-8 rounded-md bg-primary/8 flex items-center justify-center border border-border/50">
