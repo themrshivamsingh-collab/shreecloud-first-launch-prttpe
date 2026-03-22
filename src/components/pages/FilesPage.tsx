@@ -145,7 +145,7 @@ export function FilesPage({ onOpenPluginsManager }: FilesPageProps) {
           {currentPath.includes("/plugins") && onOpenPluginsManager && (
             <button
               onClick={onOpenPluginsManager}
-              className="btn-glow flex items-center gap-2 px-4 py-2 rounded-xl bg-primary/15 text-primary font-medium text-sm border border-primary/20 hover:bg-primary/25 transition-all"
+              className="btn-gradient flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-semibold"
             >
               <Package className="h-4 w-4" /> Plugins Manager
             </button>
