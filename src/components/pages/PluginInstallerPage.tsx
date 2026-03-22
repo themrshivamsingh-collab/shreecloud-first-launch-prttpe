@@ -218,7 +218,7 @@ export function PluginInstallerPage({ onManagePlugins }: PluginInstallerProps) {
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder="Search plugins..."
-            className="w-full bg-background border border-border rounded-lg pl-9 pr-4 py-2.5 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-ring"
+            className="w-full panel-card pl-9 pr-4 py-2.5 text-sm text-foreground placeholder:text-muted-foreground/50 focus:outline-none focus:ring-2 focus:ring-ring"
           />
         </div>
 
