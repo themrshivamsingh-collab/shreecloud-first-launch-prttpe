@@ -24,9 +24,11 @@ function StatCard({ icon: Icon, label, value, color }: {
   icon: React.ElementType; label: string; value: string; color: string;
 }) {
   return (
-    <div className="stat-card">
+    <div className="panel-card p-4">
       <div className="flex items-center gap-2 mb-1.5">
-        <Icon className={`h-3.5 w-3.5 ${color}`} />
+        <div className="h-7 w-7 rounded-lg bg-primary/8 flex items-center justify-center">
+          <Icon className={`h-3.5 w-3.5 ${color}`} />
+        </div>
         <span className="text-[10px] sm:text-[11px] text-muted-foreground uppercase tracking-wider font-medium">{label}</span>
       </div>
       <p className="text-xs sm:text-sm font-semibold text-foreground truncate">{value}</p>
