@@ -369,7 +369,7 @@ export function PluginInstallerPage({ onManagePlugins }: PluginInstallerProps) {
             <button
               onClick={() => setPage((p) => p + 1)}
               disabled={page >= totalPages}
-              className="flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium bg-card border border-border text-foreground hover:bg-accent disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+              className="flex items-center gap-1.5 px-4 py-2 rounded-xl text-sm font-medium panel-card text-foreground hover:bg-accent disabled:opacity-40 disabled:cursor-not-allowed transition-all"
             >
               Next
               <ChevronRight className="h-4 w-4" />
