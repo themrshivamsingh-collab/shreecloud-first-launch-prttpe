@@ -115,8 +115,8 @@ export function ActivityPage() {
     <div className="space-y-5 max-w-6xl">
       {/* Header */}
       <div>
-        <h1 className="text-2xl font-bold text-foreground tracking-tight">Activity</h1>
-        <p className="text-sm text-muted-foreground mt-1">Track all server and user actions in real time</p>
+        <h1 className="text-xl font-bold text-foreground tracking-tight">Activity</h1>
+        <p className="text-sm text-muted-foreground mt-0.5">Track all server and user actions in real time</p>
       </div>
 
       {/* Filters */}
