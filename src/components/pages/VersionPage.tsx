@@ -112,8 +112,8 @@ export function VersionPage() {
     <div className="space-y-6 max-w-5xl">
       {/* Header */}
       <div>
-        <h1 className="text-2xl font-bold text-foreground tracking-tight">Server Version</h1>
-        <p className="text-sm text-muted-foreground mt-1">Select your server software and version</p>
+        <h1 className="text-xl font-bold text-foreground tracking-tight">Server Version</h1>
+        <p className="text-sm text-muted-foreground mt-0.5">Select your server software and version</p>
       </div>
 
       {/* Egg Selection */}
