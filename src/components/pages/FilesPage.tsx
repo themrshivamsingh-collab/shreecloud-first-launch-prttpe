@@ -152,7 +152,7 @@ export function FilesPage({ onOpenPluginsManager }: FilesPageProps) {
           )}
           <button
             onClick={() => fetchFiles(currentPath)}
-            className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-medium bg-card border border-border text-muted-foreground hover:text-foreground transition-colors"
+            className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-medium panel-card text-muted-foreground hover:text-foreground transition-all"
           >
             <RefreshCw className="h-3.5 w-3.5" /> Refresh
           </button>
