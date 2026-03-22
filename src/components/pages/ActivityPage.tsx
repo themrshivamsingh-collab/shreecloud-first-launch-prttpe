@@ -156,7 +156,7 @@ export function ActivityPage() {
           { label: "Permissions", value: logs.filter((l) => l.category === "permission").length, color: "text-warning" },
           { label: "Failed", value: logs.filter((l) => l.status === "failed").length, color: "text-destructive" },
         ].map((s) => (
-          <div key={s.label} className="bg-card border border-border rounded-lg p-3.5">
+          <div key={s.label} className="panel-card p-3.5">
             <span className="text-xs text-muted-foreground uppercase tracking-wider">{s.label}</span>
             <p className={cn("text-xl font-bold mt-1", s.color)}>{s.value}</p>
           </div>
