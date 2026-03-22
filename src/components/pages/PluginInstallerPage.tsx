@@ -196,8 +196,8 @@ export function PluginInstallerPage({ onManagePlugins }: PluginInstallerProps) {
     <div className="space-y-5 max-w-6xl">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-foreground tracking-tight">Plugin Installer</h1>
-          <p className="text-sm text-muted-foreground mt-1">Browse and install plugins from real sources</p>
+          <h1 className="text-xl font-bold text-foreground tracking-tight">Plugin Installer</h1>
+          <p className="text-sm text-muted-foreground mt-0.5">Browse and install plugins from real sources</p>
         </div>
         {onManagePlugins && (
           <button
