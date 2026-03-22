@@ -308,7 +308,7 @@ export function ConsolePage() {
       {/* Header + Power buttons */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
         <div>
-          <h1 className="text-lg sm:text-xl font-semibold text-foreground">Console</h1>
+          <h1 className="text-lg sm:text-xl font-bold text-foreground">Console</h1>
           <p className="text-xs text-muted-foreground mt-0.5">
             Server — <span className={stateColor}>{stateLabel}</span>
           </p>
