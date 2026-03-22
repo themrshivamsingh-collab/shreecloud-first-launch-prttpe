@@ -130,10 +130,10 @@ export function VersionPage() {
                   setInstalledVersion(null);
                   setVersionSearch("");
                 }}
-                className={`relative flex flex-col items-center gap-2 p-5 rounded-xl border transition-all duration-200 hover:scale-[1.02] ${
+                className={`relative flex flex-col items-center gap-2 p-5 rounded-2xl border transition-all duration-250 hover:scale-[1.02] ${
                   active
                     ? "bg-primary/10 border-primary text-foreground ring-1 ring-primary/30 shadow-lg shadow-primary/5"
-                    : "bg-card border-border text-muted-foreground hover:border-primary/40 hover:text-foreground"
+                    : "panel-card text-muted-foreground hover:border-primary/40 hover:text-foreground"
                 }`}
               >
                 <egg.icon className={`h-8 w-8 ${active ? "text-primary" : egg.color}`} />
