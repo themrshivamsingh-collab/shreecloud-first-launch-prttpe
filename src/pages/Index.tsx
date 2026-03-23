@@ -16,6 +16,7 @@ import { ServerPropertiesPage } from "@/components/pages/ServerPropertiesPage";
 import { WorldsPage } from "@/components/pages/WorldsPage";
 import { ActivityPage } from "@/components/pages/ActivityPage";
 import { SubusersPage } from "@/components/pages/SubusersPage";
+import { TemplatesPage } from "@/components/pages/TemplatesPage";
 import { useIsMobile } from "@/hooks/use-mobile";
 
 const Index = () => {
@@ -45,6 +46,7 @@ const Index = () => {
     if (activePage === "Worlds") return <WorldsPage />;
     if (activePage === "Activity") return <ActivityPage />;
     if (activePage === "Subusers") return <SubusersPage />;
+    if (activePage === "Templates") return <TemplatesPage />;
     return <PlaceholderPage title={activePage} />;
   };
 
