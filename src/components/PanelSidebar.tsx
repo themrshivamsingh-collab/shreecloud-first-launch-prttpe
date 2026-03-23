@@ -2,7 +2,8 @@ import { useNavigate } from "react-router-dom";
 import {
   Terminal, FolderOpen, Puzzle, Archive, Rocket, Users,
   Settings, Clock, UserPlus, Database, FileText, Activity,
-  GitBranch, Home, User, LogOut, Globe, ChevronDown, ChevronLeft
+  GitBranch, Home, User, LogOut, Globe, ChevronDown, ChevronLeft,
+  LayoutTemplate
 } from "lucide-react";
 import scLogo from "@/assets/sc-logo.png";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
