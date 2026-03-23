@@ -1,7 +1,7 @@
 import { useState, useMemo } from "react";
 import {
   LayoutTemplate, Plus, Search, Filter, Tag, User, Download,
-  Eye, Pencil, Trash2, X, ChevronRight, Folder, File, FileText,
+  Eye, Pencil, Trash2, ChevronRight, Folder, File, FileText,
   FileCode, Image, Archive, Settings2, Globe, Star, Clock,
   Check, AlertTriangle
 } from "lucide-react";
