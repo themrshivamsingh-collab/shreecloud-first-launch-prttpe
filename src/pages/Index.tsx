@@ -16,6 +16,7 @@ import { ServerPropertiesPage } from "@/components/pages/ServerPropertiesPage";
 import { WorldsPage } from "@/components/pages/WorldsPage";
 import { ActivityPage } from "@/components/pages/ActivityPage";
 import { SubusersPage } from "@/components/pages/SubusersPage";
+import { TemplatesPage } from "@/components/pages/TemplatesPage";
 import { useIsMobile } from "@/hooks/use-mobile";
 
 const Index = () => {
