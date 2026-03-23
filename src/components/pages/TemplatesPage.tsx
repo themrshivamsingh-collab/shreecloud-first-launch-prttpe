@@ -23,7 +23,6 @@ import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
 
 /* ───── types ───── */
-type PermLevel = "off" | "view" | "edit";
 
 interface TemplateFile {
   name: string;

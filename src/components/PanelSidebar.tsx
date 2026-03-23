@@ -42,6 +42,7 @@ const navGroups = [
     label: "ADDONS",
     items: [
       { label: "Plugin Installer", icon: Puzzle },
+      { label: "Templates", icon: LayoutTemplate },
       { label: "Subusers", icon: UserPlus },
     ],
   },
