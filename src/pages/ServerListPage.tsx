@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input";
 import { useAuth } from "@/contexts/AuthContext";
 import { useState, useEffect } from "react";
 import { listServers } from "@/lib/pterodactyl";
-import { MOCK_SERVERS } from "@/lib/mockData";
+
 
 export default function ServerListPage() {
   const navigate = useNavigate();
@@ -18,15 +18,6 @@ export default function ServerListPage() {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    if (isDemoMode) {
-      // Use mock data for Discord demo login
-      setTimeout(() => {
-        setServers(MOCK_SERVERS);
-        setLoading(false);
-      }, 800);
-      return;
-    }
-
     listServers()
       .then((data) => {
         setServers(data);
@@ -38,7 +29,7 @@ export default function ServerListPage() {
         console.error(`[${new Date().toLocaleTimeString()}] Error loading server data:`, msg);
       })
       .finally(() => setLoading(false));
-  }, [isDemoMode]);
+  }, []);
 
   const filtered = servers.filter((s) =>
     s.name.toLowerCase().includes(search.toLowerCase())
