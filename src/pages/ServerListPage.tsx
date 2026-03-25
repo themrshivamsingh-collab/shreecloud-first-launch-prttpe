@@ -18,15 +18,6 @@ export default function ServerListPage() {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    if (isDemoMode) {
-      // Use mock data for Discord demo login
-      setTimeout(() => {
-        setServers(MOCK_SERVERS);
-        setLoading(false);
-      }, 800);
-      return;
-    }
-
     listServers()
       .then((data) => {
         setServers(data);

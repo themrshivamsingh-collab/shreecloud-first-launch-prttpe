@@ -33,7 +33,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     return saved ? JSON.parse(saved) : null;
   });
 
-  const isDemoMode = user?.isDiscord === true;
+  const isDemoMode = false;
 
   const login = useCallback(async (email: string, _password: string) => {
     await new Promise((r) => setTimeout(r, 800));
