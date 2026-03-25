@@ -51,7 +51,11 @@ const Index = () => {
   };
 
   return (
-    <div className="flex min-h-screen bg-background">
+    <div className="flex min-h-screen bg-background relative">
+      {/* Ambient background effects */}
+      <div className="ambient-bg" />
+      <div className="noise-overlay" />
+
       {!isMobile && (
         <PanelSidebar activePage={activePage} onNavigate={handleNavigate} />
       )}
@@ -62,13 +66,13 @@ const Index = () => {
             className="fixed inset-0 bg-background/80 backdrop-blur-sm"
             onClick={() => setMobileMenuOpen(false)}
           />
-          <div className="relative z-50 w-[250px] max-w-[80vw] animate-in slide-in-from-left duration-200">
+          <div className="relative z-50 w-[260px] max-w-[80vw] animate-in slide-in-from-left duration-200">
             <PanelSidebar activePage={activePage} onNavigate={handleNavigate} />
           </div>
         </div>
       )}
 
-      <div className="flex-1 flex flex-col overflow-hidden min-w-0">
+      <div className="flex-1 flex flex-col overflow-hidden min-w-0 relative z-[2]">
         <PanelTopBar
           activePage={activePage}
           onMenuToggle={isMobile ? () => setMobileMenuOpen(!mobileMenuOpen) : undefined}
