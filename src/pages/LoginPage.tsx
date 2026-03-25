@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import { LogIn, Loader2, Mail, KeyRound, Eye, EyeOff } from "lucide-react";
+import { LogIn, Loader2, Mail, KeyRound, Eye, EyeOff, Sparkles } from "lucide-react";
 import scLogo from "@/assets/sc-logo.png";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -47,78 +47,92 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen bg-background flex">
+    <div className="min-h-screen bg-background flex relative overflow-hidden">
+      {/* Ambient background */}
+      <div className="ambient-bg" />
+      <div className="noise-overlay" />
+
       {/* Left side — form */}
-      <div className="flex-1 flex flex-col items-center justify-center px-6 py-12">
-        <div className="w-full max-w-sm animate-in fade-in slide-in-from-bottom-4 duration-500">
+      <div className="relative z-10 flex-1 flex flex-col items-center justify-center px-6 py-12">
+        <div className="w-full max-w-sm float-in">
           {/* Logo */}
-          <div className="flex items-center gap-2.5 mb-10">
-            <img src={scLogo} alt="ShreeCloud" className="h-9 w-9 rounded-xl" />
-            <span className="font-bold text-foreground text-lg">ShreeCloud</span>
+          <div className="flex items-center gap-3 mb-12">
+            <div className="relative">
+              <img src={scLogo} alt="ShreeCloud" className="h-10 w-10 rounded-xl ring-1 ring-primary/15" />
+              <div className="absolute -bottom-0.5 -right-0.5 h-2.5 w-2.5 rounded-full bg-success border-2 border-background" />
+            </div>
+            <div>
+              <span className="font-bold text-foreground text-lg tracking-[-0.03em] lapsus-gradient-text">ShreeCloud</span>
+              <span className="text-[10px] text-muted-foreground/40 block tracking-wide uppercase">Game Panel</span>
+            </div>
           </div>
 
-          <h1 className="text-xl font-bold text-foreground mb-1">Login to Continue</h1>
-          <p className="text-sm text-muted-foreground mb-8">Welcome back to your panel</p>
+          <div className="flex items-center gap-2 mb-2">
+            <Sparkles className="h-4 w-4 text-primary/40" />
+            <span className="text-[10px] font-semibold text-primary/50 uppercase tracking-[0.15em]">Welcome back</span>
+          </div>
+          <h1 className="text-2xl font-bold text-foreground mb-1.5 tracking-[-0.03em]">Login to Continue</h1>
+          <p className="text-sm text-muted-foreground/50 mb-8">Sign in to access your server panel</p>
 
           <form onSubmit={handleLogin} className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="email" className="text-xs text-muted-foreground">Username or Email</Label>
-              <div className="relative">
-                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+              <Label htmlFor="email" className="text-xs text-muted-foreground/60 font-medium">Username or Email</Label>
+              <div className="relative premium-focus rounded-xl">
+                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground/40" />
                 <Input
                   id="email"
                   type="email"
                   placeholder="you@example.com"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="h-11 pl-10 bg-muted/50 border-border"
+                  className="h-12 pl-10 bg-card/40 border-border/40 backdrop-blur-sm rounded-xl"
                 />
               </div>
             </div>
 
             <div className="space-y-2">
               <div className="flex items-center justify-between">
-                <Label htmlFor="password" className="text-xs text-muted-foreground">Password</Label>
-                <button type="button" className="text-xs text-primary hover:underline">Forgot password?</button>
+                <Label htmlFor="password" className="text-xs text-muted-foreground/60 font-medium">Password</Label>
+                <button type="button" className="text-xs text-primary/60 hover:text-primary hover:underline transition-colors">Forgot password?</button>
               </div>
-              <div className="relative">
-                <KeyRound className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+              <div className="relative premium-focus rounded-xl">
+                <KeyRound className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground/40" />
                 <Input
                   id="password"
                   type={showPw ? "text" : "password"}
                   placeholder="••••••••"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="h-11 pl-10 pr-10 bg-muted/50 border-border"
+                  className="h-12 pl-10 pr-10 bg-card/40 border-border/40 backdrop-blur-sm rounded-xl"
                 />
                 <button
                   type="button"
                   onClick={() => setShowPw(!showPw)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground/40 hover:text-foreground transition-colors"
                 >
                   {showPw ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                 </button>
               </div>
             </div>
 
-            <Button type="submit" className="w-full h-11 gap-2 font-medium" disabled={loading}>
+            <Button type="submit" className="w-full h-12 gap-2 font-semibold btn-glow rounded-xl text-sm tracking-wide" disabled={loading}>
               {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : <LogIn className="h-4 w-4" />}
               Login
             </Button>
           </form>
 
-          <div className="relative my-6">
+          <div className="relative my-8">
             <div className="absolute inset-0 flex items-center">
-              <span className="w-full border-t border-border" />
+              <span className="w-full border-t border-border/30" />
             </div>
             <div className="relative flex justify-center text-xs uppercase">
-              <span className="bg-background px-3 text-muted-foreground">or continue with</span>
+              <span className="bg-background px-4 text-muted-foreground/30 tracking-widest text-[10px] font-medium">or continue with</span>
             </div>
           </div>
 
           <Button
             variant="outline"
-            className="w-full h-11 gap-2 bg-[hsl(235,86%,65%)]/10 border-[hsl(235,86%,65%)]/30 text-foreground hover:bg-[hsl(235,86%,65%)]/20"
+            className="w-full h-12 gap-2.5 bg-[hsl(235,86%,65%)]/8 border-[hsl(235,86%,65%)]/20 text-foreground hover:bg-[hsl(235,86%,65%)]/15 hover:border-[hsl(235,86%,65%)]/30 btn-premium rounded-xl font-medium"
             onClick={() => setDiscordOpen(true)}
           >
             <svg className="h-5 w-5" viewBox="0 0 24 24" fill="currentColor">
@@ -127,31 +141,49 @@ export default function LoginPage() {
             Login with Discord
           </Button>
 
-          <p className="text-center text-sm text-muted-foreground mt-6">
+          <p className="text-center text-sm text-muted-foreground/40 mt-8">
             New here?{" "}
-            <Link to="/register" className="text-primary hover:underline font-medium uppercase text-xs tracking-wide">
+            <Link to="/register" className="text-primary/70 hover:text-primary hover:underline font-semibold text-xs tracking-wide uppercase transition-colors">
               Create an account
             </Link>
           </p>
 
-          <p className="text-center text-xs text-muted-foreground/50 mt-10">
+          <p className="text-center text-[10px] text-muted-foreground/20 mt-12 tracking-wider">
             ShreeCloud Panel © 2024 – 2026
           </p>
         </div>
       </div>
 
-      {/* Right side — gradient panel (hidden on small screens) */}
-      <div className="hidden lg:flex w-[45%] arix-gradient rounded-l-3xl m-3 items-center justify-center relative overflow-hidden">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,hsl(var(--primary)/0.4),transparent_70%)]" />
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_80%_80%,hsl(var(--primary)/0.2),transparent_60%)]" />
-        <div className="relative text-center px-12">
-          <div className="h-20 w-20 rounded-2xl bg-primary/20 backdrop-blur-sm flex items-center justify-center mx-auto mb-8 border border-primary/20">
-            <img src={scLogo} alt="ShreeCloud" className="h-12 w-12 rounded-lg" />
+      {/* Right side — gradient panel */}
+      <div className="hidden lg:flex w-[45%] relative m-3 rounded-2xl overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-br from-primary/20 via-card to-card/80" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,hsl(var(--glow-color)/0.3),transparent_60%)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_80%_80%,hsl(var(--glow-secondary)/0.15),transparent_50%)]" />
+        <div className="absolute inset-0 border border-border/20 rounded-2xl" />
+
+        {/* Grid pattern */}
+        <div className="absolute inset-0 opacity-[0.03]" style={{
+          backgroundImage: 'linear-gradient(hsl(var(--foreground)) 1px, transparent 1px), linear-gradient(90deg, hsl(var(--foreground)) 1px, transparent 1px)',
+          backgroundSize: '40px 40px'
+        }} />
+
+        <div className="relative flex flex-col items-center justify-center w-full px-12">
+          <div className="h-24 w-24 rounded-3xl bg-primary/10 backdrop-blur-xl flex items-center justify-center mx-auto mb-10 border border-primary/15 shadow-2xl shadow-primary/10">
+            <img src={scLogo} alt="ShreeCloud" className="h-14 w-14 rounded-xl" />
           </div>
-          <h2 className="text-3xl font-bold text-primary-foreground mb-3">ShreeCloud Panel</h2>
-          <p className="text-primary-foreground/70 text-sm max-w-xs mx-auto leading-relaxed">
-            Manage your game servers with a powerful, modern control panel.
+          <h2 className="text-3xl font-bold text-foreground mb-3 tracking-[-0.03em]">ShreeCloud Panel</h2>
+          <p className="text-foreground/40 text-sm max-w-xs mx-auto leading-relaxed text-center">
+            Manage your game servers with a powerful, modern control panel built for performance.
           </p>
+
+          {/* Feature pills */}
+          <div className="flex flex-wrap gap-2 mt-8 justify-center">
+            {["Real-time Console", "File Manager", "One-Click Deploy"].map((f) => (
+              <span key={f} className="text-[10px] px-3 py-1.5 rounded-full bg-primary/8 text-primary/60 border border-primary/10 font-medium tracking-wide">
+                {f}
+              </span>
+            ))}
+          </div>
         </div>
       </div>
 

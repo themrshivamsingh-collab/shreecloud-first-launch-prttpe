@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from "react";
-import { Play, RotateCcw, Square, Cpu, HardDrive, Clock, Wifi, MemoryStick, CircleDot, Loader2 } from "lucide-react";
+import { Play, RotateCcw, Square, Cpu, HardDrive, Clock, Wifi, MemoryStick, CircleDot, Loader2, Activity, TrendingUp } from "lucide-react";
 import { useTheme, THEME_NAMES } from "@/contexts/ThemeContext";
 import { useAuth } from "@/contexts/AuthContext";
 import { AreaChart, Area, XAxis, YAxis, ResponsiveContainer, Tooltip } from "recharts";
@@ -8,7 +8,6 @@ import { getServerResources, getServerDetails, sendCommand, sendPowerAction } fr
 import { MOCK_RESOURCES, MOCK_SERVER_DETAILS, MOCK_CONSOLE_LOGS } from "@/lib/mockData";
 import { useToast } from "@/hooks/use-toast";
 
-/* ── Log Entry Type ── */
 interface LogEntry {
   timestamp: string;
   level: "info" | "warn" | "error" | "command";
@@ -19,24 +18,22 @@ function formatTimestamp() {
   return new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
 }
 
-/* ── Reusable Stat Card ── */
-function StatCard({ icon: Icon, label, value, color }: {
-  icon: React.ElementType; label: string; value: string; color: string;
+function StatCard({ icon: Icon, label, value, color, index = 0 }: {
+  icon: React.ElementType; label: string; value: string; color: string; index?: number;
 }) {
   return (
-    <div className="panel-card p-4">
-      <div className="flex items-center gap-2 mb-1.5">
-        <div className="h-7 w-7 rounded-lg bg-primary/8 flex items-center justify-center">
+    <div className={`panel-card p-4 float-in float-in-delay-${Math.min(index + 1, 5)}`}>
+      <div className="flex items-center gap-2 mb-2">
+        <div className="h-8 w-8 rounded-lg bg-gradient-to-br from-primary/10 to-primary/5 flex items-center justify-center border border-border/30">
           <Icon className={`h-3.5 w-3.5 ${color}`} />
         </div>
-        <span className="text-[10px] sm:text-[11px] text-muted-foreground uppercase tracking-wider font-medium">{label}</span>
+        <span className="text-[10px] text-muted-foreground/50 uppercase tracking-[0.12em] font-semibold">{label}</span>
       </div>
-      <p className="text-xs sm:text-sm font-semibold text-foreground truncate">{value}</p>
+      <p className="text-sm font-bold text-foreground truncate tracking-[-0.01em]">{value}</p>
     </div>
   );
 }
 
-/* ── Resource Graph ── */
 function ResourceGraph({ title, data, color, gradientId, unit, icon: Icon, currentValue }: {
   title: string;
   data: { time: string; value: number }[];
@@ -48,23 +45,26 @@ function ResourceGraph({ title, data, color, gradientId, unit, icon: Icon, curre
 }) {
   return (
     <div className="panel-card p-4 sm:p-5">
-      <div className="flex items-center justify-between mb-3">
-        <div className="flex items-center gap-2.5">
-          <div className="h-8 w-8 rounded-md bg-primary/8 flex items-center justify-center border border-border/50">
+      <div className="flex items-center justify-between mb-4">
+        <div className="flex items-center gap-3">
+          <div className="h-9 w-9 rounded-lg bg-gradient-to-br from-primary/10 to-primary/5 flex items-center justify-center border border-border/30">
             <Icon className="h-4 w-4" style={{ color }} />
           </div>
           <div>
-            <span className="text-sm font-medium text-foreground">{title}</span>
-            <span className="text-xs text-muted-foreground ml-2 font-mono">{currentValue}</span>
+            <span className="text-sm font-semibold text-foreground tracking-[-0.01em]">{title}</span>
+            <div className="flex items-center gap-1.5 mt-0.5">
+              <TrendingUp className="h-3 w-3 text-muted-foreground/40" />
+              <span className="text-xs text-muted-foreground/60 font-mono">{currentValue}</span>
+            </div>
           </div>
         </div>
       </div>
-      <div className="h-[100px] sm:h-[130px] w-full">
+      <div className="h-[110px] sm:h-[140px] w-full">
         <ResponsiveContainer width="100%" height="100%">
           <AreaChart data={data} margin={{ top: 4, right: 4, left: -24, bottom: 0 }}>
             <defs>
               <linearGradient id={gradientId} x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stopColor={color} stopOpacity={0.2} />
+                <stop offset="0%" stopColor={color} stopOpacity={0.25} />
                 <stop offset="100%" stopColor={color} stopOpacity={0} />
               </linearGradient>
             </defs>
@@ -89,6 +89,7 @@ function ResourceGraph({ title, data, color, gradientId, unit, icon: Icon, curre
                 fontSize: "12px",
                 color: "hsl(var(--foreground))",
                 padding: "8px 12px",
+                boxShadow: "0 8px 32px -8px hsl(0 0% 0% / 0.3)",
               }}
               formatter={(value: number) => [`${value.toFixed(1)}${unit}`, title]}
             />
@@ -96,10 +97,10 @@ function ResourceGraph({ title, data, color, gradientId, unit, icon: Icon, curre
               type="monotone"
               dataKey="value"
               stroke={color}
-              strokeWidth={1.5}
+              strokeWidth={2}
               fill={`url(#${gradientId})`}
               dot={false}
-              activeDot={{ r: 3, strokeWidth: 2, fill: color }}
+              activeDot={{ r: 4, strokeWidth: 2, fill: color, stroke: "hsl(var(--card))" }}
             />
           </AreaChart>
         </ResponsiveContainer>
@@ -126,7 +127,7 @@ function getLogColor(level: string) {
     case "error": return "text-destructive";
     case "warn": return "text-warning";
     case "command": return "text-primary";
-    default: return "text-foreground/60";
+    default: return "text-foreground/50";
   }
 }
 
@@ -152,14 +153,12 @@ export function ConsolePage() {
     setLogs((prev) => [...prev, { timestamp: formatTimestamp(), level, message }]);
   };
 
-  // Load mock data for demo mode
   useEffect(() => {
     if (!isDemoMode) return;
     
     setServerInfo(MOCK_SERVER_DETAILS);
     setResources(MOCK_RESOURCES);
     
-    // Populate mock logs
     setTimeout(() => {
       const mockLogs: LogEntry[] = MOCK_CONSOLE_LOGS.map(l => ({
         timestamp: l.time,
@@ -170,7 +169,6 @@ export function ConsolePage() {
       setLoading(false);
     }, 600);
 
-    // Simulate resource fluctuations
     const interval = setInterval(() => {
       const now = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
       const cpuVal = 25 + Math.random() * 30;
@@ -183,7 +181,6 @@ export function ConsolePage() {
     return () => clearInterval(interval);
   }, [isDemoMode]);
 
-  // Real data fetch
   useEffect(() => {
     if (isDemoMode || !serverId) return;
     getServerDetails(serverId)
@@ -256,7 +253,6 @@ export function ConsolePage() {
     addLog("command", `> ${command}`);
 
     if (isDemoMode) {
-      // Simulate command responses in demo mode
       setTimeout(() => {
         addLog("info", `[Server] Command executed: ${command}`);
       }, 300);
@@ -306,61 +302,76 @@ export function ConsolePage() {
   return (
     <div className="space-y-5 max-w-6xl">
       {/* Header + Power buttons */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 float-in">
         <div>
-          <h1 className="text-lg sm:text-xl font-bold text-foreground">Console</h1>
-          <p className="text-xs text-muted-foreground mt-0.5">
-            Server — <span className={stateColor}>{stateLabel}</span>
+          <div className="flex items-center gap-2 mb-0.5">
+            <Activity className="h-4 w-4 text-primary/50" />
+            <span className="text-[10px] font-semibold text-primary/60 uppercase tracking-[0.15em]">Live Console</span>
+          </div>
+          <h1 className="text-xl sm:text-2xl font-bold text-foreground tracking-[-0.03em]">Console</h1>
+          <p className="text-xs text-muted-foreground/50 mt-0.5">
+            Server — <span className={`font-semibold ${stateColor}`}>{stateLabel}</span>
           </p>
         </div>
         <div className="flex gap-2">
-          <button onClick={() => handlePower('start')} className="btn-glow flex items-center gap-1.5 px-4 py-2.5 rounded-xl bg-success hover:bg-success/90 text-success-foreground font-semibold text-xs active:scale-[0.96] transition-transform">
-            <Play className="h-3.5 w-3.5" /> Start
-          </button>
-          <button onClick={() => handlePower('restart')} className="btn-glow flex items-center gap-1.5 px-4 py-2.5 rounded-xl bg-warning hover:bg-warning/90 text-warning-foreground font-semibold text-xs active:scale-[0.96] transition-transform">
-            <RotateCcw className="h-3.5 w-3.5" /> Restart
-          </button>
-          <button onClick={() => handlePower('stop')} className="btn-glow flex items-center gap-1.5 px-4 py-2.5 rounded-xl bg-destructive hover:bg-destructive/90 text-destructive-foreground font-semibold text-xs active:scale-[0.96] transition-transform">
-            <Square className="h-3.5 w-3.5" /> Stop
-          </button>
+          {[
+            { signal: 'start' as const, icon: Play, label: 'Start', bg: 'bg-success hover:bg-success/90', text: 'text-success-foreground' },
+            { signal: 'restart' as const, icon: RotateCcw, label: 'Restart', bg: 'bg-warning hover:bg-warning/90', text: 'text-warning-foreground' },
+            { signal: 'stop' as const, icon: Square, label: 'Stop', bg: 'bg-destructive hover:bg-destructive/90', text: 'text-destructive-foreground' },
+          ].map(({ signal, icon: BtnIcon, label, bg, text }) => (
+            <button
+              key={signal}
+              onClick={() => handlePower(signal)}
+              className={`btn-glow flex items-center gap-1.5 px-4 py-2.5 rounded-xl ${bg} ${text} font-semibold text-xs`}
+            >
+              <BtnIcon className="h-3.5 w-3.5" /> {label}
+            </button>
+          ))}
         </div>
       </div>
 
       {/* Stat row */}
       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-2.5">
-        <StatCard icon={CircleDot} label="Status" value={stateLabel} color={stateColor} />
-        <StatCard icon={Cpu} label="CPU" value={cpuStr} color="text-success" />
-        <StatCard icon={MemoryStick} label="RAM" value={ramStr} color="text-primary" />
-        <StatCard icon={HardDrive} label="Disk" value={diskStr} color="text-warning" />
-        <StatCard icon={Clock} label="Uptime" value={uptimeStr} color="text-muted-foreground" />
+        <StatCard icon={CircleDot} label="Status" value={stateLabel} color={stateColor} index={0} />
+        <StatCard icon={Cpu} label="CPU" value={cpuStr} color="text-success" index={1} />
+        <StatCard icon={MemoryStick} label="RAM" value={ramStr} color="text-primary" index={2} />
+        <StatCard icon={HardDrive} label="Disk" value={diskStr} color="text-warning" index={3} />
+        <StatCard icon={Clock} label="Uptime" value={uptimeStr} color="text-muted-foreground" index={4} />
       </div>
 
       {/* Terminal */}
-      <div className="terminal-container">
+      <div className="terminal-container float-in float-in-delay-2">
         <div className="terminal-header">
           <div className="flex items-center gap-1.5">
-            <div className="h-2.5 w-2.5 rounded-full bg-destructive/70" />
-            <div className="h-2.5 w-2.5 rounded-full bg-warning/70" />
-            <div className="h-2.5 w-2.5 rounded-full bg-success/70" />
+            <div className="h-3 w-3 rounded-full bg-destructive/60 hover:bg-destructive transition-colors cursor-pointer" />
+            <div className="h-3 w-3 rounded-full bg-warning/60 hover:bg-warning transition-colors cursor-pointer" />
+            <div className="h-3 w-3 rounded-full bg-success/60 hover:bg-success transition-colors cursor-pointer" />
           </div>
-          <span className="ml-2 text-[11px] text-muted-foreground font-mono tracking-wider">server console</span>
+          <span className="ml-3 text-[11px] text-muted-foreground/40 font-mono tracking-widest uppercase">server console</span>
+          <div className="ml-auto flex items-center gap-1.5">
+            <span className="relative flex h-1.5 w-1.5">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-success opacity-60" />
+              <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-success" />
+            </span>
+            <span className="text-[10px] text-success/60 font-mono">live</span>
+          </div>
         </div>
-        <div ref={terminalRef} className="terminal-body terminal-scroll h-[280px] sm:h-[360px]">
+        <div ref={terminalRef} className="terminal-body terminal-scroll h-[300px] sm:h-[380px]">
           {logs.map((entry, i) => (
-            <div key={i} className={`py-0.5 flex gap-2 ${getLogColor(entry.level)}`}>
-              <span className="text-muted-foreground/40 font-mono text-[11px] shrink-0 select-none">{entry.timestamp}</span>
-              <span className="break-all">{entry.message}</span>
+            <div key={i} className={`py-0.5 flex gap-2.5 ${getLogColor(entry.level)} hover:bg-foreground/[0.02] px-1 -mx-1 rounded`}>
+              <span className="text-muted-foreground/30 font-mono text-[11px] shrink-0 select-none tabular-nums">{entry.timestamp}</span>
+              <span className="break-all text-[12.5px]">{entry.message}</span>
             </div>
           ))}
         </div>
         <div className="terminal-input-row">
-          <span className="px-3 sm:px-4 py-3 text-primary font-mono text-sm select-none">$</span>
+          <span className="px-4 py-3.5 text-primary font-mono text-sm select-none">$</span>
           <input
             value={command}
             onChange={(e) => setCommand(e.target.value)}
             onKeyDown={(e) => e.key === "Enter" && handleCommand()}
             placeholder="Type a command..."
-            className="flex-1 bg-transparent py-3 pr-4 text-sm font-mono text-foreground placeholder:text-muted-foreground/40 focus:outline-none min-w-0"
+            className="flex-1 bg-transparent py-3.5 pr-4 text-sm font-mono text-foreground placeholder:text-muted-foreground/30 focus:outline-none min-w-0"
           />
         </div>
       </div>
